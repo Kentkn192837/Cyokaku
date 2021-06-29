@@ -16,7 +16,8 @@ def getsignal(wf):
     org_signal = np.frombuffer(org_signal, dtype="int16") / 2 ** (sample_width * 8 - 1)
     return org_signal, t, fs, frames
 
-def delayFilter(delay_list, org_signal, test_signal, fs, frames, t):
+def delayFilter(delay_list, org_signal, fs, frames, t):
+    test_signal = org_signal
     for delay in delay_list:
         delayfilter = signal.firwin(numtaps=delay, cutoff=fs/4, fs=fs)
         sig = signal.lfilter(delayfilter, 1, test_signal)
@@ -35,10 +36,8 @@ def delayFilter(delay_list, org_signal, test_signal, fs, frames, t):
 wf = wave.open("exam.wav", "r")
 org_signal, t, fs, frames = getsignal(wf)
 
-test_signal = org_signal
-
 delay_list = [14*1, 14*2, 14*3, 14*4, 14*5, 14*6]
-delayFilter(delay_list, org_signal, test_signal, fs, frames, t)
+delayFilter(delay_list, org_signal, fs, frames, t)
 
 delay_list = [20*1, 20*2, 20*3, 20*4]
-delayFilter(delay_list, org_signal, test_signal, fs, frames, t)
+delayFilter(delay_list, org_signal, fs, frames, t)
